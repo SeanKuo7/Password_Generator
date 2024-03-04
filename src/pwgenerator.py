@@ -15,7 +15,7 @@ while True:
         )
         characters = string.ascii_letters + string.digits
         if inputStr == "":
-            inputStr = "32?"
+            inputStr = "32"
         if "?" in inputStr:
             characters += string.punctuation
             inputStr = inputStr[:-1]
