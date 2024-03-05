@@ -1,15 +1,14 @@
 # Author: Sean Bailey
 # 210216
-# linux$ pyinstaller ./pwgenerator.py -F --dist ./
-# windows> pyinstaller .\pwgenerator.py --onefile --distpath .\
+# linux$ pyinstaller ./passwordGenerator.py -F --dist ./
+# windows> pyinstaller .\src\passwordGenerator.py --onefile --distpath .\
 
 import string
 import random
 from datetime import datetime
-import time
 import secrets
 import asyncio
-
+from loadingAnimation import LoadingAnimation
 
 class PasswordGenerator:
     characters = string.ascii_letters + string.digits
@@ -43,9 +42,11 @@ class PasswordGenerator:
     def run(self):
         while True:
             try:
+                animation = LoadingAnimation()
                 inputStr = input(
                     """(number = length, default to 128, will include special characters if end with '?'. ^c to exit)\nInput a number and an optional '?': """
                 )
+                animation.start()
                 self.charset = self.characters
                 if inputStr == "":
                     inputStr = self.defaultLen
@@ -54,6 +55,7 @@ class PasswordGenerator:
                     inputStr = inputStr[:-1]  # trim one char
                 length = int(inputStr)
                 randomString = "".join(self.getSecretChar() for x in range(length))
+                animation.stop()
                 print("\n", randomString, "\n")
             except Exception as e:
                 print("An error occurred:", e, "\n")
