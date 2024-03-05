@@ -14,7 +14,7 @@ class PasswordGenerator:
     characters = string.ascii_letters + string.digits
     charset = characters
     defaultLen = "32"
-    
+
     def __init__(self) -> None:
         pass
 
@@ -24,29 +24,27 @@ class PasswordGenerator:
         currentTimeWithMs = int(datetime.now().strftime("%Y%m%d%H%M%S%f"))
         random.seed(currentTimeWithMs)
         return random.choice(self.charset)
-    
+
     def getSecretChar(self):
         return secrets.choice(self.charset)
-    
+
     def run(self):
         while True:
             try:
-                currentTime = int(time.time())
-                random.seed(currentTime)
                 inputStr = input(
-                    'Input a number and a "?" (length = number & "?" add symbol:\n'
+                    """(number = length, default to 128, will include special characters if end with '?'. ^c to exit)\nInput a number and an optional '?': """
                 )
                 self.charset = self.characters
                 if inputStr == "":
                     inputStr = self.defaultLen
                 if "?" in inputStr:
                     self.charset += string.punctuation
-                    inputStr = inputStr[:-1]
+                    inputStr = inputStr[:-1]  # trim one char
                 length = int(inputStr)
-                password = "".join(self.getSecretChar() for x in range(length))
-                print("\n", password, "\n")
+                randomString = "".join(self.getSecretChar() for x in range(length))
+                print("\n", randomString, "\n")
             except Exception as e:
-                print("\nException:", e)
+                print("An error occurred:", e, "\n")
 
 
 def main():
