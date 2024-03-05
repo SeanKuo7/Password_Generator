@@ -8,12 +8,14 @@ import random
 from datetime import datetime
 import time
 import secrets
+import asyncio
 
 
 class PasswordGenerator:
     characters = string.ascii_letters + string.digits
     charset = characters
-    defaultLen = "32"
+    maxGeneratingInterval = 100
+    defaultLen = "128"
 
     def __init__(self) -> None:
         pass
@@ -25,7 +27,17 @@ class PasswordGenerator:
         random.seed(currentTimeWithMs)
         return random.choice(self.charset)
 
+    async def asyncioSleepMilliseconds(self, milliseconds):
+        await asyncio.sleep(milliseconds / 1000)
+
+    def sleepMilliseconds(self, milliseconds):
+        asyncio.run(self.asyncioSleepMilliseconds(milliseconds))
+
     def getSecretChar(self):
+        currentTimeWithMs = int(datetime.now().strftime("%Y%m%d%H%M%S%f"))
+        self.sleepMilliseconds(
+            currentTimeWithMs % self.maxGeneratingInterval
+        )  # extra randomness
         return secrets.choice(self.charset)
 
     def run(self):
